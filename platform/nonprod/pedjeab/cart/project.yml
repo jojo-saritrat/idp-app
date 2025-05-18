@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: cart
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  
+spec:
+  description: Cart Team
+  destinations:
+  - name: '*'
+    namespace: '*'
+    server: '*'  
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  roles:
+  - description: Read Only
+    name: read-only
+    policies:
+    - p, proj:cart:read-only, applications, get, cart/*, allow
+  - description: Read Write
+    name: read-write   
+    policies:
+    - p, proj:cart:read-write, applications, get, cart/*, allow
+    - p, proj:cart:read-write, applications, sync, cart/*, allow
+    - p, proj:cart:read-write, applications, update, cart/*, allow        
+  sourceRepos:
+  - git@github.com:jojo-saritrat/nonprod-k8s-manifests.git
+  
